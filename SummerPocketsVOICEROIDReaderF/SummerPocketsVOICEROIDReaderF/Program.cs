@@ -46,7 +46,7 @@ namespace SummerPocketsVOICEROIDReaderF
                 return;
             }
 
-            var text = GetTextFromWindow(mainWindowHandle);
+            var text = GetTextFromWindow();
 
             if (text == "") return;
 
@@ -58,7 +58,7 @@ namespace SummerPocketsVOICEROIDReaderF
             VoiceroidManager.Talk(text);
         }
 
-        private static string GetTextFromWindow(IntPtr mainWindowHandle)
+        private static string GetTextFromWindow()
         {
             // 画面キャプチャ
             var bmp = ClientCapture.GetBitmap(mainWindowHandle);
@@ -81,7 +81,18 @@ namespace SummerPocketsVOICEROIDReaderF
 
             // OCRによる文字読み取り
             var ocrManager = new OcrManager();
-            return ocrManager.GetTextFromBitmap(bmp);
+            var text = ocrManager.GetTextFromBitmap(bmp);
+
+            // 加工 issue#1
+            text = text.Replace("聚", "♪");
+
+            // 加工 issue#2(一部)
+            if (text.IndexOf('」') >= text.IndexOf('「')) return text;
+
+            var index = text.IndexOf('」');
+            text = text.Substring(index + 1, text.Length - index -1) + text.Substring(0, index);
+
+            return text;
         }
     }
 }
