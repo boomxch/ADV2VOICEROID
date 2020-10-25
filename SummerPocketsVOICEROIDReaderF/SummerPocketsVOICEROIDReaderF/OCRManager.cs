@@ -17,6 +17,7 @@ namespace SummerPocketsVOICEROIDReaderF
             _tesseract = new TesseractEngine(LangPath, LngStr);
             _tesseract.SetVariable("tessedit_char_blacklist",
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz〈ヽ〉'〝<〟‥“\\ゐ=`”_.丿″\"");
+            _tesseract.DefaultPageSegMode = PageSegMode.SingleBlock;
         }
 
         public string GetTextFromBitmap(Image bmp)
